@@ -1,0 +1,20 @@
+# Put this in ~/.ainisio.config or run with path to config
+# Alternatively, you can specify the JIRA_ variables in your env
+
+# JIRA_HOST: 'https://...'
+# JIRA_USER: 'lzr.tAgger@ltztztztztag.com'
+# JIRA_PROJECT: 'LASERTAG'
+# JIRA_SPRINT: '1463.4.6-LT-234'
+
+# symbols:
+#   me:
+#   open:
+#   closed:
+#   in_progress:
+#   current_issue:
+#   current_parent:
+#   priority_0:
+#   priority_1:
+#   priority_2:
+#   priority_3:
+#   priority_4:
