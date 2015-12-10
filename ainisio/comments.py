@@ -5,6 +5,11 @@ from .base import IssueHandler
 class IssueShowerComment(IssueHandler, Lister):
     "show jira issue's comments"
 
+    def get_parser(self, prog_name):
+        parser = super(IssueShowerComment, self).get_parser(prog_name)
+        parser.add_argument('key',  nargs='?', default=self.app.current_issue)
+        return parser
+
     def parse_issue(self, issue, parsed_args):
         comments = issue.fields.comment.comments
         keys = 'ID,Author,Comment'.split(',')
