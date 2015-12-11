@@ -34,6 +34,7 @@ setup(
             'close = ainisio.status:IssueCloser',
             'start = ainisio.status:IssueStarter',
             'open = ainisio.status:IssueOpener',
+            'status = ainisio.status:IssueArbitraryStatusUpdater',
             # ======== Create ========
             'task = ainisio.create:IssueNewTask',
             'subtask = ainisio.create:IssueNewSubtask',
@@ -41,6 +42,8 @@ setup(
             'bug = ainisio.create:IssueNewBug',
             # ======== Sprints ========
             'sprint = ainisio.create:IssueAddToSprint',
+            # ======== Priority ========
+            'priority = ainisio.priority:IssuePriorityUpdater',
         ],
     },
 )

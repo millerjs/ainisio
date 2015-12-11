@@ -137,12 +137,13 @@ class IssueHandler(AinisioBase):
         priority = min(max(int(priority), 0), 5)
         return self.get_symbol('priority_{}'.format(priority))
 
-    def get_field(self, field, issue):
+    def get_field(self, field, issue, use_icons=True):
         is_current_issue = issue.key == self.app.current_issue
         parent = getattr(issue.fields, 'parent', '')
 
         if field == 'assignee':
-            return self.get_assignee(issue)
+            return (self.get_assignee(issue) if use_icons
+                    else issue.fields.assignee.name)
         if field == 'is_current_issue':
             if is_current_issue:
                 return self.get_symbol('current_issue')
@@ -152,12 +153,14 @@ class IssueHandler(AinisioBase):
         elif field == 'parent':
             return parent
         elif field == 'status':
-            return self.get_status(issue)
+            return (self.get_status(issue) if use_icons
+                    else issue.fields.status.name)
         elif field == 'ncomments':
             count = len(issue.fields.comment.comments)
             return count if count else ''
         elif field == 'priority':
-            return self.get_priority(issue)
+            return (self.get_priority(issue) if use_icons
+                    else issue.fields.priority.name)
         elif field in ['creator', 'author', 'reporter']:
             person = getattr(issue.fields, field, '')
             return person.displayName if person else ''
@@ -172,11 +175,11 @@ class IssueHandler(AinisioBase):
         else:
             return self.wrap_lines(str(getattr(issue.fields, field, '')))
 
-    def get_issue_fields(self, fields, issue, app=None):
+    def get_issue_fields(self, fields, issue, use_icons=True):
         vals = []
         for field in fields:
             try:
-                vals += [self.get_field(field, issue)]
+                vals += [self.get_field(field, issue, use_icons=use_icons)]
             except Exception as e:
                 vals += ['']
                 print("Error adding field '{}': {}".format(field, e))
@@ -210,7 +213,7 @@ class IssueLister(IssueHandler, Lister):
 
     def generate_table(self, issues, parsed_args):
         return (self.fields.keys(), (
-            self.get_issue_fields(self.fields.values(), i, self.app)
+            self.get_issue_fields(self.fields.values(), i)
             for i in issues
         ))
 
@@ -238,8 +241,8 @@ class IssueShower(IssueHandler, ShowOne):
         parser.add_argument('key',  nargs='?', default=self.app.current_issue)
         return parser
 
-    def parse_issue(self, issue, parsed_args):
-        vals = self.get_issue_fields(self.fields.values(), issue, self.app)
+    def parse_issue(self, issue, parsed_args, use_icons=False):
+        vals = self.get_issue_fields(self.fields.values(), issue, use_icons=False)
         return self.fields.keys(), vals
 
     def take_action(self, parsed_args):
