@@ -5,8 +5,9 @@ setup(
     version='0.0.1',
     packages=find_packages(),
     install_requires=[
-        'jira',
+        'jira==1.0.3',
         'cliff',
+        'termcolor',
     ],
     entry_points={
         'console_scripts': [
